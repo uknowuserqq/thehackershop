@@ -1,0 +1,243 @@
+<!-- mensaje de uknowuser_qq -->
+<!-- no robes ni una parte del codigo ni javascript ni css ni html  -->
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>the hacker shop</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.68/build/spline-viewer.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+
+
+        spline-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+
+        .boton-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+
+        .credito {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .card-credit {
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+
+            background: linear-gradient(145deg,
+                    #000000,
+                    #0a0a0a,
+                    #111111);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+
+            box-shadow:
+                0 0 20px rgba(0, 0, 0, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.05);
+        }
+
+        .card-credit span {
+            color: #2dd4bf;
+            font-weight: bold;
+        }
+
+
+        #popupContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            transform: translateX(120%);
+            transition: 0.5s;
+            z-index: 999;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="boton-container">
+
+        <button onclick="window.location.href='principal.html'"
+            class="relative h-12 px-8 rounded-lg overflow-hidden transition-all duration-500 group">
+
+            <div class="absolute inset-0 rounded-lg p-[2px] bg-gradient-to-b from-[#3fe0c5] via-[#0b2c2c] to-[#0f766e]">
+                <div class="absolute inset-0 bg-[#021a1a] rounded-lg opacity-90"></div>
+            </div>
+
+            <div class="absolute inset-[2px] bg-[#021a1a] rounded-lg opacity-95"></div>
+
+            <div
+                class="absolute inset-[2px] bg-gradient-to-r from-[#021a1a] via-[#053b3b] to-[#021a1a] rounded-lg opacity-90">
+            </div>
+
+            <div
+                class="absolute inset-[2px] bg-gradient-to-b from-[#3fe0c5]/40 via-[#053b3b] to-[#0f766e]/30 rounded-lg opacity-80">
+            </div>
+
+            <div
+                class="absolute inset-[2px] bg-gradient-to-br from-[#7fffd4]/20 via-[#053b3b] to-[#021a1a]/50 rounded-lg">
+            </div>
+
+            <div class="absolute inset-[2px] shadow-[inset_0_0_15px_rgba(64,224,208,0.25)] rounded-lg"></div>
+
+            <div class="relative flex items-center justify-center gap-2">
+                <span
+                    class="text-lg font-normal bg-gradient-to-b from-[#a7fff1] to-[#2dd4bf] bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(45,212,191,0.6)] tracking-tighter">
+                    Entrar
+                </span>
+            </div>
+
+        </button>
+
+    </div>
+
+
+    <div class="credito">
+        <div class="card-credit">
+            Creado por <span>uknowuser_qq</span>
+        </div>
+    </div>
+
+
+
+    <spline-viewer url="https://prod.spline.design/re78gWk1ZknDjjiS/scene.splinecode"></spline-viewer>
+
+
+
+    <div id="popupContainer">
+
+        <div class="flex flex-col gap-2 w-60 sm:w-72 text-[10px] sm:text-xs">
+
+            <div
+                class="error-alert cursor-default flex items-center justify-between w-full h-12 sm:h-14 rounded-lg bg-[#232531] px-[10px]">
+                <div class="flex gap-2">
+                    <div class="text-[#d65563] bg-white/5 backdrop-blur-xl p-1 rounded-lg">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                        </svg>
+
+                    </div>
+
+                    <div>
+                        <p class="text-white">no veas el codigo fuente</p>
+                        <p class="text-gray-500">ver un poco el codigo esta prohibido</p>
+                    </div>
+
+                </div>
+
+                <button onclick="hidePopup()"
+                    class="text-gray-600 hover:bg-white/10 p-1 rounded-md transition-colors ease-linear">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const popup = document.getElementById("popupContainer");
+
+        function showPopup() {
+
+            popup.style.transform = "translateX(0)";
+
+            setTimeout(() => {
+                popup.style.transform = "translateX(120%)";
+            }, 3000);
+
+        }
+
+        function hidePopup() {
+            popup.style.transform = "translateX(120%)";
+        }
+
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+            showPopup();
+        });
+
+
+
+        document.addEventListener("keydown", function (e) {
+
+            if (e.key === "F12") {
+                e.preventDefault();
+                showPopup();
+            }
+
+            if (e.ctrlKey && e.key === "u") {
+                e.preventDefault();
+                showPopup();
+            }
+
+            if (e.ctrlKey && e.shiftKey && e.key === "I") {
+                e.preventDefault();
+                showPopup();
+            }
+
+            if (e.ctrlKey && e.shiftKey && e.key === "J") {
+                e.preventDefault();
+                showPopup();
+            }
+
+            if (e.ctrlKey && e.shiftKey && e.key === "C") {
+                e.preventDefault();
+                showPopup();
+            }
+
+            if (e.ctrlKey && e.key === "s") {
+                e.preventDefault();
+                showPopup();
+            }
+
+        });
+
+
+
+        document.addEventListener("dragstart", function (e) {
+            e.preventDefault();
+        });
+
+    </script>
+
+</body>
+
+</html>
