@@ -4,21 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>craxsrat 7.6</title>
+    <title>OSINT Tracker Pro - 2026 Edition</title>
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .feature-line { margin-bottom: 15px; line-height: 1.6; display: block; }
-        .gradient-text {
-            display: inline-block;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: bold;
-        }
-        .font-bold { font-weight: bold; }
-        .font-italic { font-style: italic; }
-        #dynamicFeatures { min-height: 100px; }
-    </style>
 </head>
 
 <body oncontextmenu="return false;">
@@ -26,19 +14,19 @@
 
     <div class="plantilla-container">
         <div class="plantilla-left">
-            <img src="../fotos/1.png" alt="craxs rat 7.6" class="main-product-img"
-                onerror="this.src='https://via.placeholder.com/800x600?text=craxsrat'">
+            <img src="../fotos/1.png" alt="OSINT Tracker Pro" class="main-product-img"
+                onerror="this.src='https://via.placeholder.com/800x600?text=OSINT+Tracker+Pro'">
 
             <div class="stats-card">
                 <div class="stat-item">
                     <div class="icon-box"><i class="fas fa-user-secret"></i></div>
                     <span class="stat-label">Creador</span>
-                    <span class="stat-value">evlf_dev</span>
+                    <span class="stat-value">X-Ghost</span>
                 </div>
                 <div class="stat-item">
                     <div class="icon-box"><i class="fas fa-code-branch"></i></div>
                     <span class="stat-label">Versión</span>
-                    <span class="stat-value">7.6</span>
+                    <span class="stat-value">2.4.1</span>
                 </div>
                 <div class="stat-item">
                     <div class="icon-box"><i class="fas fa-microchip"></i></div>
@@ -56,7 +44,8 @@
         <div class="plantilla-right">
             <div class="features-box">
                 <div class="medium-feature-card" id="dynamicFeatures">
-                    <div style="color: #888; text-align: center; padding: 20px;">Iniciando sistema...</div>
+                    <!-- Features will be loaded here -->
+                    <div style="color: #444; text-align: center; padding: 20px;">Cargando especificaciones...</div>
                 </div>
                 <a href="../contacto.html" class="buy-btn" style="margin-top: 40px;">Adquirir Licencia</a>
             </div>
@@ -64,70 +53,118 @@
     </div>
 
     <div style="text-align: center; margin-bottom: 6rem;">
-        <a href="../principal.html" class="filter-btn">dashboard</a>
+        <a href="../principal.html" class="filter-btn">Cerrar Sesión</a>
     </div>
 
-<script>
-    // Backup ultra-simple. Sin comas locas al final, sin formatos raros.
-    const contentBackup = {
-        "1": "# CraxsRAT 7.6\nCraxsRAT es un troyano de acceso remoto para Android altamente sofisticado. Funciones: Control total, webcam, robar credenciales, ver pantalla, contactos, llamadas y mucho más."
-    };
+    <script>
+        // Fallback Content Registry
+        const contentBackup = {
+            "1": "# CraxsRAT | Advanced Remote Control\n\"Monitoreo y administración total de dispositivos Android\",white,normal,normal\ngradiente.*glasmorfismo*,white+blue,negrita,bold\n*persistente*,red,italic,normal\n*silencioso*,silver,bold,bold\n\"Control en tiempo real sin límites\",grey,italic,normal"
+        };
 
-    async function loadFeatures() {
-        const path = window.location.pathname;
-        const fileName = path.split('/').pop().replace('.html', '');
-        
-        // Intentamos cargar el TXT
-        try {
-            const response = await fetch(`../txts/${fileName}.txt`);
-            if (!response.ok) throw new Error();
-            const text = await response.text();
-            parseContent(text);
-        } catch (err) {
-            // Si falla el TXT, usamos el backup sí o sí
-            const fallback = contentBackup[fileName];
-            if (fallback) {
-                parseContent(fallback);
-            } else {
-                document.getElementById('dynamicFeatures').innerHTML = "ID no encontrado: " + fileName;
+        // Custom Feature Parser 2026 with Fail-Safe
+        async function loadFeatures() {
+            const path = window.location.pathname;
+            const fileName = path.split('/').pop().replace('.html', '');
+            const txtUrl = `../txts/${fileName}.txt`;
+
+            try {
+                const response = await fetch(txtUrl);
+                if (!response.ok) throw new Error('Local Restriction');
+                const text = await response.text();
+                parseContent(text);
+            } catch (err) {
+                console.warn("Fetch failed, using internal fallback for ID:", fileName);
+                const fallbackText = contentBackup[fileName];
+                if (fallbackText) {
+                    parseContent(fallbackText);
+                } else {
+                    document.getElementById('dynamicFeatures').innerHTML = `<div style="color: grey; text-align: center;">Error: Específicaciones no encontradas (${fileName})</div>`;
+                }
             }
         }
-    }
 
-    function parseContent(text) {
-        const container = document.getElementById('dynamicFeatures');
-        container.innerHTML = ''; // Limpiamos el "Cargando..."
+        function parseContent(content) {
+            const lines = content.split('\n');
+            const container = document.getElementById('dynamicFeatures');
+            container.innerHTML = '';
 
-        const lines = text.split('\n');
+            lines.forEach(line => {
+                line = line.trim();
+                if (!line) return;
 
-        lines.forEach(line => {
-            if (!line.trim()) return;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'feature-line';
 
-            const div = document.createElement('div');
-            div.style.marginBottom = "15px";
+                if (line.startsWith('#')) {
+                    const headerText = line.substring(1).trim();
+                    container.insertAdjacentHTML('beforeend', `
+                        <div class="feature-header-wrapper">
+                            <div class="feature-header-text">${headerText}</div>
+                            <div class="gradient-separator"></div>
+                        </div>
+                    `);
+                    return;
+                }
 
-            if (line.startsWith('#')) {
-                // Es un título
-                div.innerHTML = `<h2 style="color:#ff4d4d; font-size:1.5rem; margin:0;">${line.replace('#', '').trim()}</h2>
-                                 <div style="height:2px; background:red; width:50px; margin-top:5px;"></div>`;
-            } else {
-                // Es texto normal
-                div.innerHTML = `<p style="color:white; line-height:1.6; margin:0;">${line.trim()}</p>`;
-            }
-            container.appendChild(div);
-        });
-    }
+                const parts = line.split(',');
+                if (parts.length < 2) return;
 
-    loadFeatures();
+                let mainPart = parts[0].trim();
+                let color = parts[1]?.trim() || 'white';
+                let fontType = parts[2]?.trim() || 'normal';
+                let fontWeight = parts[3]?.trim() || 'normal';
 
-    // Bloqueos de seguridad (Tus llaves)
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.onkeydown = function (e) {
-        if (e.keyCode == 123) return false;
-        if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false;
-        if (e.ctrlKey && e.keyCode == 85) return false;
-    };
-</script>
+                let isGradient = mainPart.startsWith('gradiente.');
+                if (isGradient) mainPart = mainPart.replace('gradiente.', '');
+
+                let cleanText = mainPart.replace(/[*"]/g, '');
+
+                const span = document.createElement('span');
+                span.textContent = cleanText;
+
+                if (fontType.includes('negrita')) span.classList.add('font-negrita');
+                if (fontWeight.includes('bold')) span.classList.add('font-bold');
+                if (fontType.includes('italic')) span.classList.add('font-italic');
+
+                if (isGradient) {
+                    span.classList.add('gradient-text');
+                    if (color.includes('+')) {
+                        const [c1, c2] = color.split('+').map(c => translateColor(c.trim()));
+                        span.style.backgroundImage = `linear-gradient(90deg, ${c1}, ${c2})`;
+                    } else {
+                        const c1 = translateColor(color);
+                        span.style.backgroundImage = `linear-gradient(90deg, ${c1}, rgba(255,255,255,0.2))`;
+                    }
+                } else {
+                    span.style.color = translateColor(color);
+                }
+
+                wrapper.appendChild(span);
+                container.appendChild(wrapper);
+            });
+        }
+
+        function translateColor(c) {
+            const colors = {
+                'rojo': '#ff4d4d',
+                'azul': '#4d4dff',
+                'blanco': '#ffffff',
+                'gris': '#888888',
+                'plata': '#c0c0c0'
+            };
+            return colors[c.toLowerCase()] || c;
+        }
+
+        loadFeatures();
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = function (e) {
+            if (event.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false;
+            if (e.ctrlKey && e.keyCode == 85) return false;
+        };
+    </script>
 </body>
-</html>
 
+</html>
