@@ -3,6 +3,7 @@
 *seguro*,white,italic,normal
 *forense*,silver,bold,bold
 "Extrae metadatos en segundos",grey,italic,normal
+gradiente.*txt*,azul,bold,negrita
 
 
 
