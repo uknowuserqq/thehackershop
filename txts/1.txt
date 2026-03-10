@@ -1,11 +1,7 @@
 # CraxsRAT 7.6
 
-*CraxsRAT fue la mejor herramienta de administracion remota, este era un rat para Android altamente sofisticadoRobo de credenciales de cuentas de correo, Facebook, Telegram y banca.
-Grabación de llamadas y videollamadas sin consentimiento.
-Monitoreo de navegación web, redirección a sitios fraudulentos y fuerza de apertura de páginas.
-Envío de SMS a contactos para propagar el malware.
-Cifrado de archivos (en variantes como Craxsrat Ransomware) con extensión .craxsrat y exigencia de rescate de 50 dólares en Bitcoin. 
-Posibilidad de instalar cargas útiles adicionales, como ransomware o otros troyanos. *,silver,bold,bold*
+*CraxsRAT fue la mejor herramienta de administracion remota, este era un rat para Android altamente sofisticadoRobo de credenciales de  *,silver,bold,bold*
+
 
 
 
