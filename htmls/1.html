@@ -44,7 +44,7 @@
         <div class="plantilla-right">
             <div class="features-box">
                 <div class="medium-feature-card" id="dynamicFeatures">
-                    <!-- Features will be loaded here -->
+
                     <div style="color: #444; text-align: center; padding: 20px;">Cargando especificaciones...</div>
                 </div>
                 <a href="../contacto.html" class="buy-btn" style="margin-top: 40px;">Adquirir Licencia</a>
@@ -57,13 +57,12 @@
     </div>
 
     <script>
-        // Fallback Content Registry
+
         const contentBackup = {
-            "1": "# CraxsRAT 7.6\n\ngradiente.*CraxsRAT es un troyano de acceso remoto (RAT) para Android altamente sofisticado algunas de sus funciones son : controlar completamente el dispositivo ver webcam robar credenciales ver pantalla ver contactos escuchar llamadas y muchas mas...*,white+red,negrita,bold\n*seguro*,white,italic,normal\n*forense*,silver,bold,bold\n\"Extrae metadatos en segundos\",grey,italic,normal",
+            "1": "# CraxsRAT 7.6\n\ngradiente.*CraxsRAT es un troyano de acceso remoto (RAT) para Android altamente sofisticado algunas de sus funciones son : controlar completamente el dispositivo ver webcam robar credenciales ver pantalla ver contactos escuchar llamadas y muchas mas...*,
            
         };
 
-        // Custom Feature Parser 2026 with Fail-Safe
         async function loadFeatures() {
             const path = window.location.pathname;
             const fileName = path.split('/').pop().replace('.html', '');
@@ -170,5 +169,6 @@
 
 
 </html>
+
 
 
