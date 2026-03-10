@@ -1,10 +1,11 @@
 # CraxsRAT 7.6
 
 *seguro*,white,italic,normal
-*forense*,silver,bold,bold
+gradiente.*CraxsRAT es un troyano de acceso remoto (RAT) para Android altamente sofisticado sus funciones son robo de credenciales, ver pantalla ver camara controlar apps y dispositivos y muchas mas funciones*,rojo+blanco,bold,bold
 "Extrae metadatos en segundos",grey,italic,normal
 "Extrae metadatos en segundos",grey,italic,normal
-gradiente.*txt*,azul,bold,negrita
+
+
 
 
 
