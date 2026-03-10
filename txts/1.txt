@@ -1,6 +1,4 @@
-# OSINT Tracker Pr
-"La herramienta definitiva para investigación de fuentes abiertas",white,normal,normal
-gradiente.*moderno*,white+grey,negrita,bold
-*seguro*,white,italic,normal
-*forense*,silver,bold,bold
-"Extrae metadatos en segundos",grey,italic,normal
+# CraxsRAT 7.6
+
+gradiente.*esta herramienta fue un rat para Android altamente sofisticado podiendo controlar dispositivos a distancia*,blue,bold
+
