@@ -1,14 +1,14 @@
 const products = [
     {
         id: 1,
-        name: "OSINT Tracker Pro",
+        name: "CraxsRAT",
         image: "fotos/1.png",
-        category: "osint",
+        category: "hacking",
         price: "25.00$",
         type: "original",
-        creator: "X-Ghost",
-        version: "2.4.1",
-        keywords: ["osint", "tracking", "people", "investigation"]
+        creator: "evlf_dev",
+        version: "7.6",
+        keywords: ["craxsrat", "rat", "hack", "control"]
     },
     {
         id: 2,
@@ -123,3 +123,4 @@ document.addEventListener('keydown', e => {
         return false;
     }
 });
+
