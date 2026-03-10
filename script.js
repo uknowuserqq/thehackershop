@@ -12,14 +12,14 @@ const products = [
     },
     {
         id: 2,
-        name: "WIFI Breaker v3",
+        name: "BTMOB RAT",
         image: "fotos/2.png",
         category: "hacking",
-        price: "Gratis",
-        type: "cracked",
-        creator: "Anon_User",
-        version: "3.0.0",
-        keywords: ["hacking", "wifi", "network", "free"]
+        price: "30.00$",
+        type: "original",
+        creator: "evlf_dev",
+        version: "v4",
+        keywords: ["hacking", "rat", "btmob", "de pago"]
     },
     {
         id: 3,
@@ -123,5 +123,6 @@ document.addEventListener('keydown', e => {
         return false;
     }
 });
+
 
 
