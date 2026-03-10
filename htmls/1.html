@@ -67,115 +67,60 @@
         <a href="../principal.html" class="filter-btn">dashboard</a>
     </div>
 
-    <script>
-    // 1. Backup corregido con formato compatible
+<script>
+    // Backup ultra-simple. Sin comas locas al final, sin formatos raros.
     const contentBackup = {
-       "1": "# CraxsRAT 7.6\ngradiente.*CraxsRAT es un troyano de acceso remoto para Android altamente sofisticado. Funciones: controlar dispositivo, webcam, robar credenciales, ver pantalla, contactos, llamadas y más.*, blanco+rojo, normal, bold"
+        "1": "# CraxsRAT 7.6\nCraxsRAT es un troyano de acceso remoto para Android altamente sofisticado. Funciones: Control total, webcam, robar credenciales, ver pantalla, contactos, llamadas y mucho más."
     };
 
     async function loadFeatures() {
         const path = window.location.pathname;
         const fileName = path.split('/').pop().replace('.html', '');
-        const txtUrl = `../txts/${fileName}.txt`;
-
+        
+        // Intentamos cargar el TXT
         try {
-            const response = await fetch(txtUrl);
-            if (!response.ok) throw new Error('Not found');
+            const response = await fetch(`../txts/${fileName}.txt`);
+            if (!response.ok) throw new Error();
             const text = await response.text();
             parseContent(text);
         } catch (err) {
-            console.warn("Cargando Backup para:", fileName);
-            const fallbackText = contentBackup[fileName];
-            if (fallbackText) {
-                parseContent(fallbackText);
+            // Si falla el TXT, usamos el backup sí o sí
+            const fallback = contentBackup[fileName];
+            if (fallback) {
+                parseContent(fallback);
             } else {
-                document.getElementById('dynamicFeatures').innerHTML = `<div style="color: grey; text-align: center;">Error: Datos no encontrados (${fileName})</div>`;
+                document.getElementById('dynamicFeatures').innerHTML = "ID no encontrado: " + fileName;
             }
         }
     }
 
-    function parseContent(content) {
-        const lines = content.split('\n');
+    function parseContent(text) {
         const container = document.getElementById('dynamicFeatures');
-        container.innerHTML = '';
+        container.innerHTML = ''; // Limpiamos el "Cargando..."
+
+        const lines = text.split('\n');
 
         lines.forEach(line => {
-            line = line.trim();
-            if (!line) return;
+            if (!line.trim()) return;
+
+            const div = document.createElement('div');
+            div.style.marginBottom = "15px";
 
             if (line.startsWith('#')) {
-                const headerText = line.substring(1).trim();
-                container.insertAdjacentHTML('beforeend', `
-                    <div class="feature-header-wrapper" style="margin-bottom: 20px;">
-                        <div class="feature-header-text" style="font-size: 1.4rem; color: #fff; font-weight: bold;">${headerText}</div>
-                        <div class="gradient-separator" style="height: 2px; background: linear-gradient(90deg, #ff4d4d, transparent); margin-top: 5px;"></div>
-                    </div>
-                `);
-                return;
-            }
-
-            // NUEVA LÓGICA: Separar solo por la ÚLTIMA coma para no romper el texto largo
-            const lastCommaIndex = line.lastIndexOf(',');
-            let mainPart, stylePart;
-
-            if (lastCommaIndex !== -1 && (line.length - lastCommaIndex) < 50) {
-                mainPart = line.substring(0, lastCommaIndex).trim();
-                stylePart = line.substring(lastCommaIndex + 1).trim();
+                // Es un título
+                div.innerHTML = `<h2 style="color:#ff4d4d; font-size:1.5rem; margin:0;">${line.replace('#', '').trim()}</h2>
+                                 <div style="height:2px; background:red; width:50px; margin-top:5px;"></div>`;
             } else {
-                mainPart = line;
-                stylePart = 'blanco';
+                // Es texto normal
+                div.innerHTML = `<p style="color:white; line-height:1.6; margin:0;">${line.trim()}</p>`;
             }
-
-            const styles = stylePart.split(' ');
-            let color = styles[0] || 'blanco';
-            
-            let isGradient = mainPart.startsWith('gradiente.');
-            if (isGradient) mainPart = mainPart.replace('gradiente.', '');
-
-            let cleanText = mainPart.replace(/[*"]/g, '');
-
-            const wrapper = document.createElement('div');
-            wrapper.className = 'feature-line';
-
-            const span = document.createElement('span');
-            span.textContent = cleanText;
-
-            // Negrita si tiene asteriscos o si el estilo lo dice
-            if (line.includes('*') || stylePart.includes('bold') || stylePart.includes('negrita')) {
-                span.classList.add('font-bold');
-            }
-
-            if (isGradient) {
-                span.classList.add('gradient-text');
-                if (color.includes('+')) {
-                    const [c1, c2] = color.split('+').map(c => translateColor(c.trim()));
-                    span.style.backgroundImage = `linear-gradient(90deg, ${c1}, ${c2})`;
-                } else {
-                    const c1 = translateColor(color);
-                    span.style.backgroundImage = `linear-gradient(90deg, ${c1}, #ffffff)`;
-                }
-            } else {
-                span.style.color = translateColor(color);
-            }
-
-            wrapper.appendChild(span);
-            container.appendChild(wrapper);
+            container.appendChild(div);
         });
-    }
-
-    function translateColor(c) {
-        const colors = {
-            'rojo': '#ff4d4d',
-            'azul': '#4d4dff',
-            'blanco': '#ffffff',
-            'gris': '#888888',
-            'plata': '#c0c0c0'
-        };
-        return colors[c.toLowerCase()] || c;
     }
 
     loadFeatures();
 
+    // Bloqueos de seguridad (Tus llaves)
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.onkeydown = function (e) {
         if (e.keyCode == 123) return false;
@@ -185,3 +130,4 @@
 </script>
 </body>
 </html>
+
