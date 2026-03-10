@@ -57,118 +57,116 @@
     </div>
 
     <script>
+    // 1. Corregimos el backup con el formato que espera tu parseContent (Texto, Color, Fuente, Peso)
+    const contentBackup = {
+       "1": "# CraxsRAT 7.6\ngradiente.*CraxsRAT es un troyano de acceso remoto para Android altamente sofisticado. Control total, webcam, robar credenciales y más.*, plata, normal, bold"
+    };
 
-        const contentBackup = {
-            "1": "# CraxsRAT 7.6\n\ngradiente.*CraxsRAT es un troyano de acceso remoto (RAT) para Android altamente sofisticado algunas de sus funciones son : controlar completamente el dispositivo ver webcam robar credenciales ver pantalla ver contactos escuchar llamadas y muchas mas...*,\n\
-           
-        };
+    async function loadFeatures() {
+        const path = window.location.pathname;
+        const fileName = path.split('/').pop().replace('.html', '');
+        const txtUrl = `../txts/${fileName}.txt`;
 
-        async function loadFeatures() {
-            const path = window.location.pathname;
-            const fileName = path.split('/').pop().replace('.html', '');
-            const txtUrl = `../txts/${fileName}.txt`;
-
-            try {
-                const response = await fetch(txtUrl);
-                if (!response.ok) throw new Error('Local Restriction');
-                const text = await response.text();
-                parseContent(text);
-            } catch (err) {
-                console.warn("Fetch failed, using internal fallback for ID:", fileName);
-                const fallbackText = contentBackup[fileName];
-                if (fallbackText) {
-                    parseContent(fallbackText);
-                } else {
-                    document.getElementById('dynamicFeatures').innerHTML = `<div style="color: grey; text-align: center;">Error: Específicaciones no encontradas (${fileName})</div>`;
-                }
+        try {
+            const response = await fetch(txtUrl);
+            if (!response.ok) throw new Error('Local Restriction');
+            const text = await response.text();
+            parseContent(text);
+        } catch (err) {
+            console.warn("Usando backup interno para:", fileName);
+            const fallbackText = contentBackup[fileName];
+            if (fallbackText) {
+                parseContent(fallbackText);
+            } else {
+                document.getElementById('dynamicFeatures').innerHTML = `<div style="color: grey; text-align: center;">Error: Específicaciones no encontradas (${fileName})</div>`;
             }
         }
+    }
 
-        function parseContent(content) {
-            const lines = content.split('\n');
-            const container = document.getElementById('dynamicFeatures');
-            container.innerHTML = '';
+    function parseContent(content) {
+        const lines = content.split('\n');
+        const container = document.getElementById('dynamicFeatures');
+        container.innerHTML = '';
 
-            lines.forEach(line => {
-                line = line.trim();
-                if (!line) return;
+        lines.forEach(line => {
+            line = line.trim();
+            if (!line) return;
 
-                const wrapper = document.createElement('div');
-                wrapper.className = 'feature-line';
+            // Manejo de encabezados (#)
+            if (line.startsWith('#')) {
+                const headerText = line.substring(1).trim();
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="feature-header-wrapper">
+                        <div class="feature-header-text">${headerText}</div>
+                        <div class="gradient-separator"></div>
+                    </div>
+                `);
+                return;
+            }
 
-                if (line.startsWith('#')) {
-                    const headerText = line.substring(1).trim();
-                    container.insertAdjacentHTML('beforeend', `
-                        <div class="feature-header-wrapper">
-                            <div class="feature-header-text">${headerText}</div>
-                            <div class="gradient-separator"></div>
-                        </div>
-                    `);
-                    return;
-                }
+            // Separar por comas, pero solo las que definen formato al final
+            const parts = line.split(',');
+            let mainPart = parts[0].trim();
+            let color = parts[1]?.trim() || 'blanco';
+            let fontType = parts[2]?.trim() || 'normal';
+            let fontWeight = parts[3]?.trim() || 'normal';
 
-                const parts = line.split(',');
-                if (parts.length < 2) return;
+            let isGradient = mainPart.startsWith('gradiente.');
+            if (isGradient) mainPart = mainPart.replace('gradiente.', '');
 
-                let mainPart = parts[0].trim();
-                let color = parts[1]?.trim() || 'white';
-                let fontType = parts[2]?.trim() || 'normal';
-                let fontWeight = parts[3]?.trim() || 'normal';
+            let cleanText = mainPart.replace(/[*"]/g, '');
 
-                let isGradient = mainPart.startsWith('gradiente.');
-                if (isGradient) mainPart = mainPart.replace('gradiente.', '');
+            const wrapper = document.createElement('div');
+            wrapper.className = 'feature-line';
 
-                let cleanText = mainPart.replace(/[*"]/g, '');
+            const span = document.createElement('span');
+            span.textContent = cleanText;
 
-                const span = document.createElement('span');
-                span.textContent = cleanText;
+            // Aplicar estilos
+            if (fontType.includes('negrita') || fontWeight.includes('bold')) span.style.fontWeight = 'bold';
+            if (fontType.includes('italic')) span.style.fontStyle = 'italic';
 
-                if (fontType.includes('negrita')) span.classList.add('font-negrita');
-                if (fontWeight.includes('bold')) span.classList.add('font-bold');
-                if (fontType.includes('italic')) span.classList.add('font-italic');
+            if (isGradient) {
+                span.style.display = 'inline-block';
+                span.style.webkitBackgroundClip = 'text';
+                span.style.webkitTextFillColor = 'transparent';
+                const c1 = translateColor(color);
+                span.style.backgroundImage = `linear-gradient(90deg, ${c1}, #ffffff)`;
+            } else {
+                span.style.color = translateColor(color);
+            }
 
-                if (isGradient) {
-                    span.classList.add('gradient-text');
-                    if (color.includes('+')) {
-                        const [c1, c2] = color.split('+').map(c => translateColor(c.trim()));
-                        span.style.backgroundImage = `linear-gradient(90deg, ${c1}, ${c2})`;
-                    } else {
-                        const c1 = translateColor(color);
-                        span.style.backgroundImage = `linear-gradient(90deg, ${c1}, rgba(255,255,255,0.2))`;
-                    }
-                } else {
-                    span.style.color = translateColor(color);
-                }
+            wrapper.appendChild(span);
+            container.appendChild(wrapper);
+        });
+    }
 
-                wrapper.appendChild(span);
-                container.appendChild(wrapper);
-            });
-        }
-
-        function translateColor(c) {
-            const colors = {
-                'rojo': '#ff4d4d',
-                'azul': '#4d4dff',
-                'blanco': '#ffffff',
-                'gris': '#888888',
-                'plata': '#c0c0c0'
-            };
-            return colors[c.toLowerCase()] || c;
-        }
-
-        loadFeatures();
-
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = function (e) {
-            if (event.keyCode == 123) return false;
-            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false;
-            if (e.ctrlKey && e.keyCode == 85) return false;
+    function translateColor(c) {
+        const colors = {
+            'rojo': '#ff4d4d',
+            'azul': '#4d4dff',
+            'blanco': '#ffffff',
+            'gris': '#888888',
+            'plata': '#c0c0c0'
         };
-    </script>
+        return colors[c.toLowerCase()] || c;
+    }
+
+    loadFeatures();
+
+    // Protecciones de consola
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.onkeydown = function (e) {
+        if (e.keyCode == 123) return false;
+        if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false;
+        if (e.ctrlKey && e.keyCode == 85) return false;
+    };
+</script>
 </body>
 
 
 </html>
+
 
 
 
