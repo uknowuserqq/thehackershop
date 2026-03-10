@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es" class="no-copy">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking & OSINT Store 2026</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body oncontextmenu="return false;">
+    <iframe id="bg-frame" src="../fondo/fondo.html"></iframe>
+
+    <div class="plantilla-container">
+        <!-- Left Side -->
+        <div class="plantilla-left">
+            <img src="../fotos/1.png" alt="Producto" class="main-product-img" id="productImg"
+                onerror="this.src='https://via.placeholder.com/800x600?text=Premium+Tool'">
+
+            <div class="stats-card">
+                <div class="stat-item">
+                    <div class="icon-box"><i class="fas fa-user-secret"></i></div>
+                    <span class="stat-label">Creador</span>
+                    <span class="stat-value" id="val-creator">---</span>
+                </div>
+                <div class="stat-item">
+                    <div class="icon-box"><i class="fas fa-code-branch"></i></div>
+                    <span class="stat-label">Versión</span>
+                    <span class="stat-value" id="val-version">---</span>
+                </div>
+                <div class="stat-item">
+                    <div class="icon-box"><i class="fas fa-microchip"></i></div>
+                    <span class="stat-label">Tipo</span>
+                    <span class="stat-value" id="val-type">---</span>
+                </div>
+                <div class="stat-item">
+                    <div class="icon-box"><i class="fas fa-tag"></i></div>
+                    <span class="stat-label">Precio</span>
+                    <span class="stat-value" id="val-price">---</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="plantilla-right">
+            <div class="features-box">
+                <div class="medium-feature-card" id="dynamicFeatures">
+                    <!-- Features will be loaded here -->
+                    <div style="color: #444; text-align: center; padding: 20px;">Cargando especificaciones...</div>
+                </div>
+                <a href="../contacto.html" class="buy-btn" style="margin-top: 40px;">Adquirir Herramienta</a>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 4rem;">
+        <a href="../principal.html" class="filter-btn">Regresar a la Red</a>
+    </div>
+
+    <script>
+        // Fallback Content Registry (Secure Backup)
+        const contentBackup = {
+            "1": "# OSINT Tracker Pro\n\"La herramienta definitiva para investigación de fuentes abiertas\",white,normal,normal\ngradiente.*moderno*,white+grey,negrita,bold\n*seguro*,white,italic,normal\n*forense*,silver,bold,bold\n\"Extrae metadatos en segundos\",grey,italic,normal",
+            "2": "# WIFI Breaker v3\n\"Potente auditoría de redes inalámbricas\",white,normal,normal\ngradiente.*cracked*,white+grey,bold,bold\n*gratis*,#fff,italic,normal\n\"Compatible con adaptadores modernos\",grey,normal,normal\n# Características de Auditoría\n*vulnerabilidades*,silver,bold,bold\n\"Detección de fallos en tiempo real\",white,normal,normal"
+        };
+
+        // Custom Feature Parser 2026 with Fail-Safe
+        async function loadFeatures() {
+            const path = window.location.pathname;
+            const fileName = path.split('/').pop().replace('.html', '');
+            const txtUrl = `../txts/${fileName}.txt`;
+
+            try {
+                const response = await fetch(txtUrl);
+                if (!response.ok) throw new Error('Local Restriction');
+                const text = await response.text();
+                parseContent(text);
+            } catch (err) {
+                console.warn("Fetch failed, using internal fallback for ID:", fileName);
+                const fallbackText = contentBackup[fileName];
+                if (fallbackText) {
+                    parseContent(fallbackText);
+                } else {
+                    document.getElementById('dynamicFeatures').innerHTML = `<div style="color: grey; text-align: center;">Error: Específicaciones no encontradas (${fileName})</div>`;
+                }
+            }
+        }
+
+        function parseContent(content) {
+            const lines = content.split('\n');
+            const container = document.getElementById('dynamicFeatures');
+            container.innerHTML = '';
+
+            lines.forEach(line => {
+                line = line.trim();
+                if (!line) return;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'feature-line';
+
+                if (line.startsWith('#')) {
+                    const headerText = line.substring(1).trim();
+                    container.insertAdjacentHTML('beforeend', `
+                        <div class="feature-header-wrapper">
+                            <div class="feature-header-text">${headerText}</div>
+                            <div class="gradient-separator"></div>
+                        </div>
+                    `);
+                    return;
+                }
+
+                const parts = line.split(',');
+                if (parts.length < 2) return;
+
+                let mainPart = parts[0].trim();
+                let color = parts[1]?.trim() || 'white';
+                let fontType = parts[2]?.trim() || 'normal';
+                let fontWeight = parts[3]?.trim() || 'normal';
+
+                let isGradient = mainPart.startsWith('gradiente.');
+                if (isGradient) mainPart = mainPart.replace('gradiente.', '');
+
+                let cleanText = mainPart.replace(/[*"]/g, '');
+
+                const span = document.createElement('span');
+                span.textContent = cleanText;
+
+                if (fontType.includes('negrita')) span.classList.add('font-negrita');
+                if (fontWeight.includes('bold')) span.classList.add('font-bold');
+                if (fontType.includes('italic')) span.classList.add('font-italic');
+
+                if (isGradient) {
+                    span.classList.add('gradient-text');
+                    if (color.includes('+')) {
+                        const [c1, c2] = color.split('+').map(c => translateColor(c.trim()));
+                        span.style.backgroundImage = `linear-gradient(90deg, ${c1}, ${c2})`;
+                    } else {
+                        const c1 = translateColor(color);
+                        span.style.backgroundImage = `linear-gradient(90deg, ${c1}, rgba(255,255,255,0.2))`;
+                    }
+                } else {
+                    span.style.color = translateColor(color);
+                }
+
+                wrapper.appendChild(span);
+                container.appendChild(wrapper);
+            });
+        }
+
+        function translateColor(c) {
+            const colors = {
+                'rojo': '#ff4d4d',
+                'azul': '#4d4dff',
+                'blanco': '#ffffff',
+                'gris': '#888888',
+                'plata': '#c0c0c0'
+            };
+            return colors[c.toLowerCase()] || c;
+        }
+
+        loadFeatures();
+
+        // Security
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = function (e) {
+            if (event.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false;
+            if (e.ctrlKey && e.keyCode == 85) return false;
+        };
+    </script>
+</body>
+
+</html>

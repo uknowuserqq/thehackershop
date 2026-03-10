@@ -1,0 +1,8 @@
+# WIFI Breaker v3
+"Potente auditoría de redes inalámbricas",white,normal,normal
+gradiente.*cracked*,white+grey,bold,bold
+*gratis*,#fff,italic,normal
+"Compatible con adaptadores modernos",grey,normal,normal
+# Características de Auditoría
+*vulnerabilidades*,silver,bold,bold
+"Detección de fallos en tiempo real",white,normal,normal
