@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Estilos base para asegurar que el contenido dinámico se vea bien */
-        .feature-line { margin-bottom: 12px; line-height: 1.6; }
+        .feature-line { margin-bottom: 15px; line-height: 1.6; display: block; }
         .gradient-text {
             display: inline-block;
             -webkit-background-clip: text;
@@ -18,6 +17,7 @@
         }
         .font-bold { font-weight: bold; }
         .font-italic { font-style: italic; }
+        #dynamicFeatures { min-height: 100px; }
     </style>
 </head>
 
@@ -56,7 +56,7 @@
         <div class="plantilla-right">
             <div class="features-box">
                 <div class="medium-feature-card" id="dynamicFeatures">
-                    <div style="color: #444; text-align: center; padding: 20px;">Cargando especificaciones...</div>
+                    <div style="color: #888; text-align: center; padding: 20px;">Iniciando sistema...</div>
                 </div>
                 <a href="../contacto.html" class="buy-btn" style="margin-top: 40px;">Adquirir Licencia</a>
             </div>
@@ -68,9 +68,9 @@
     </div>
 
     <script>
-    // 1. Backup corregido (Sin errores de sintaxis)
+    // 1. Backup corregido con formato compatible
     const contentBackup = {
-       "1": "# CraxsRAT 7.6\ngradiente.*CraxsRAT es un troyano de acceso remoto para Android altamente sofisticado. Control total, webcam, robar credenciales y más.*, white+red, bold, bold"
+       "1": "# CraxsRAT 7.6\ngradiente.*CraxsRAT es un troyano de acceso remoto para Android altamente sofisticado. Funciones: controlar dispositivo, webcam, robar credenciales, ver pantalla, contactos, llamadas y más.*, blanco+rojo, normal, bold"
     };
 
     async function loadFeatures() {
@@ -89,7 +89,7 @@
             if (fallbackText) {
                 parseContent(fallbackText);
             } else {
-                document.getElementById('dynamicFeatures').innerHTML = `<div style="color: grey; text-align: center;">ID no encontrado: ${fileName}</div>`;
+                document.getElementById('dynamicFeatures').innerHTML = `<div style="color: grey; text-align: center;">Error: Datos no encontrados (${fileName})</div>`;
             }
         }
     }
@@ -103,31 +103,36 @@
             line = line.trim();
             if (!line) return;
 
-            // Manejo de títulos (#)
             if (line.startsWith('#')) {
                 const headerText = line.substring(1).trim();
                 container.insertAdjacentHTML('beforeend', `
                     <div class="feature-header-wrapper" style="margin-bottom: 20px;">
-                        <div class="feature-header-text" style="font-size: 1.5rem; color: #fff; font-weight: bold;">${headerText}</div>
+                        <div class="feature-header-text" style="font-size: 1.4rem; color: #fff; font-weight: bold;">${headerText}</div>
                         <div class="gradient-separator" style="height: 2px; background: linear-gradient(90deg, #ff4d4d, transparent); margin-top: 5px;"></div>
                     </div>
                 `);
                 return;
             }
 
-            // Procesar línea normal
-            const parts = line.split(',');
-            let mainText = parts[0].trim();
-            let colorPart = parts[1]?.trim() || 'blanco';
-            let fontType = parts[2]?.trim() || 'normal';
-            let fontWeight = parts[3]?.trim() || 'normal';
+            // NUEVA LÓGICA: Separar solo por la ÚLTIMA coma para no romper el texto largo
+            const lastCommaIndex = line.lastIndexOf(',');
+            let mainPart, stylePart;
 
-            // Detectar gradiente
-            let isGradient = mainText.startsWith('gradiente.');
-            if (isGradient) mainText = mainText.replace('gradiente.', '');
+            if (lastCommaIndex !== -1 && (line.length - lastCommaIndex) < 50) {
+                mainPart = line.substring(0, lastCommaIndex).trim();
+                stylePart = line.substring(lastCommaIndex + 1).trim();
+            } else {
+                mainPart = line;
+                stylePart = 'blanco';
+            }
 
-            // Limpiar asteriscos y comillas
-            let cleanText = mainText.replace(/[*"]/g, '');
+            const styles = stylePart.split(' ');
+            let color = styles[0] || 'blanco';
+            
+            let isGradient = mainPart.startsWith('gradiente.');
+            if (isGradient) mainPart = mainPart.replace('gradiente.', '');
+
+            let cleanText = mainPart.replace(/[*"]/g, '');
 
             const wrapper = document.createElement('div');
             wrapper.className = 'feature-line';
@@ -135,24 +140,22 @@
             const span = document.createElement('span');
             span.textContent = cleanText;
 
-            // Estilos de fuente
-            if (line.includes('*') || fontType.includes('negrita') || fontWeight.includes('bold')) {
+            // Negrita si tiene asteriscos o si el estilo lo dice
+            if (line.includes('*') || stylePart.includes('bold') || stylePart.includes('negrita')) {
                 span.classList.add('font-bold');
             }
-            if (fontType.includes('italic')) span.classList.add('font-italic');
 
-            // Aplicar Color o Gradiente
             if (isGradient) {
                 span.classList.add('gradient-text');
-                if (colorPart.includes('+')) {
-                    const [c1, c2] = colorPart.split('+').map(c => translateColor(c.trim()));
+                if (color.includes('+')) {
+                    const [c1, c2] = color.split('+').map(c => translateColor(c.trim()));
                     span.style.backgroundImage = `linear-gradient(90deg, ${c1}, ${c2})`;
                 } else {
-                    const c1 = translateColor(colorPart);
+                    const c1 = translateColor(color);
                     span.style.backgroundImage = `linear-gradient(90deg, ${c1}, #ffffff)`;
                 }
             } else {
-                span.style.color = translateColor(colorPart);
+                span.style.color = translateColor(color);
             }
 
             wrapper.appendChild(span);
@@ -173,7 +176,6 @@
 
     loadFeatures();
 
-    // Bloqueos de seguridad
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.onkeydown = function (e) {
         if (e.keyCode == 123) return false;
@@ -183,4 +185,3 @@
 </script>
 </body>
 </html>
-
