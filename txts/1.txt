@@ -1,4 +1,5 @@
 # CraxsRAT 7.6
 
-gradiente.*esta herramienta fue un rat para Android altamente sofisticado podiendo controlar dispositivos a distancia*,blue,bold
+*esta herramienta*
+
 
