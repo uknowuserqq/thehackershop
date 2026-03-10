@@ -8,7 +8,7 @@ const products = [
         type: "original",
         creator: "evlf_dev",
         version: "7.6",
-        keywords: ["craxsrat", "rat", "hack", "control"]
+        keywords: ["craxsrat", "rat", "hacking", "control"]
     },
     {
         id: 2,
@@ -123,4 +123,5 @@ document.addEventListener('keydown', e => {
         return false;
     }
 });
+
 
