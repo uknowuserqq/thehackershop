@@ -1,6 +1,6 @@
 # CraxsRAT 7.6
 
-*CraxsRAT fue la mejor herramienta de administracion remota, este era un rat para Android altamente sofisticadoRobo de credenciales de  *,silver,bold,bold*
+
 
 
 
