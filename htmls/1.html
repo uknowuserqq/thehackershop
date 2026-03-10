@@ -7,6 +7,18 @@
     <title>craxsrat 7.6</title>
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos base para asegurar que el contenido dinámico se vea bien */
+        .feature-line { margin-bottom: 12px; line-height: 1.6; }
+        .gradient-text {
+            display: inline-block;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        .font-bold { font-weight: bold; }
+        .font-italic { font-style: italic; }
+    </style>
 </head>
 
 <body oncontextmenu="return false;">
@@ -44,7 +56,6 @@
         <div class="plantilla-right">
             <div class="features-box">
                 <div class="medium-feature-card" id="dynamicFeatures">
-
                     <div style="color: #444; text-align: center; padding: 20px;">Cargando especificaciones...</div>
                 </div>
                 <a href="../contacto.html" class="buy-btn" style="margin-top: 40px;">Adquirir Licencia</a>
@@ -57,9 +68,9 @@
     </div>
 
     <script>
-    // 1. Corregimos el backup con el formato que espera tu parseContent (Texto, Color, Fuente, Peso)
+    // 1. Backup corregido (Sin errores de sintaxis)
     const contentBackup = {
-       "1": "# CraxsRAT 7.6\ngradiente.*CraxsRAT es un troyano de acceso remoto para Android altamente sofisticado. Control total, webcam, robar credenciales y más.*, white+red, normal, bold",
+       "1": "# CraxsRAT 7.6\ngradiente.*CraxsRAT es un troyano de acceso remoto para Android altamente sofisticado. Control total, webcam, robar credenciales y más.*, blanco+rojo, normal, bold"
     };
 
     async function loadFeatures() {
@@ -69,16 +80,16 @@
 
         try {
             const response = await fetch(txtUrl);
-            if (!response.ok) throw new Error('Local Restriction');
+            if (!response.ok) throw new Error('Not found');
             const text = await response.text();
             parseContent(text);
         } catch (err) {
-            console.warn("Usando backup interno para:", fileName);
+            console.warn("Cargando Backup para:", fileName);
             const fallbackText = contentBackup[fileName];
             if (fallbackText) {
                 parseContent(fallbackText);
             } else {
-                document.getElementById('dynamicFeatures').innerHTML = `<div style="color: grey; text-align: center;">Error: Específicaciones no encontradas (${fileName})</div>`;
+                document.getElementById('dynamicFeatures').innerHTML = `<div style="color: grey; text-align: center;">ID no encontrado: ${fileName}</div>`;
             }
         }
     }
@@ -92,29 +103,31 @@
             line = line.trim();
             if (!line) return;
 
-            // Manejo de encabezados (#)
+            // Manejo de títulos (#)
             if (line.startsWith('#')) {
                 const headerText = line.substring(1).trim();
                 container.insertAdjacentHTML('beforeend', `
-                    <div class="feature-header-wrapper">
-                        <div class="feature-header-text">${headerText}</div>
-                        <div class="gradient-separator"></div>
+                    <div class="feature-header-wrapper" style="margin-bottom: 20px;">
+                        <div class="feature-header-text" style="font-size: 1.5rem; color: #fff; font-weight: bold;">${headerText}</div>
+                        <div class="gradient-separator" style="height: 2px; background: linear-gradient(90deg, #ff4d4d, transparent); margin-top: 5px;"></div>
                     </div>
                 `);
                 return;
             }
 
-            // Separar por comas, pero solo las que definen formato al final
+            // Procesar línea normal
             const parts = line.split(',');
-            let mainPart = parts[0].trim();
-            let color = parts[1]?.trim() || 'blanco';
+            let mainText = parts[0].trim();
+            let colorPart = parts[1]?.trim() || 'blanco';
             let fontType = parts[2]?.trim() || 'normal';
             let fontWeight = parts[3]?.trim() || 'normal';
 
-            let isGradient = mainPart.startsWith('gradiente.');
-            if (isGradient) mainPart = mainPart.replace('gradiente.', '');
+            // Detectar gradiente
+            let isGradient = mainText.startsWith('gradiente.');
+            if (isGradient) mainText = mainText.replace('gradiente.', '');
 
-            let cleanText = mainPart.replace(/[*"]/g, '');
+            // Limpiar asteriscos y comillas
+            let cleanText = mainText.replace(/[*"]/g, '');
 
             const wrapper = document.createElement('div');
             wrapper.className = 'feature-line';
@@ -122,18 +135,24 @@
             const span = document.createElement('span');
             span.textContent = cleanText;
 
-            // Aplicar estilos
-            if (fontType.includes('negrita') || fontWeight.includes('bold')) span.style.fontWeight = 'bold';
-            if (fontType.includes('italic')) span.style.fontStyle = 'italic';
+            // Estilos de fuente
+            if (line.includes('*') || fontType.includes('negrita') || fontWeight.includes('bold')) {
+                span.classList.add('font-bold');
+            }
+            if (fontType.includes('italic')) span.classList.add('font-italic');
 
+            // Aplicar Color o Gradiente
             if (isGradient) {
-                span.style.display = 'inline-block';
-                span.style.webkitBackgroundClip = 'text';
-                span.style.webkitTextFillColor = 'transparent';
-                const c1 = translateColor(color);
-                span.style.backgroundImage = `linear-gradient(90deg, ${c1}, #ffffff)`;
+                span.classList.add('gradient-text');
+                if (colorPart.includes('+')) {
+                    const [c1, c2] = colorPart.split('+').map(c => translateColor(c.trim()));
+                    span.style.backgroundImage = `linear-gradient(90deg, ${c1}, ${c2})`;
+                } else {
+                    const c1 = translateColor(colorPart);
+                    span.style.backgroundImage = `linear-gradient(90deg, ${c1}, #ffffff)`;
+                }
             } else {
-                span.style.color = translateColor(color);
+                span.style.color = translateColor(colorPart);
             }
 
             wrapper.appendChild(span);
@@ -154,7 +173,7 @@
 
     loadFeatures();
 
-    // Protecciones de consola
+    // Bloqueos de seguridad
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.onkeydown = function (e) {
         if (e.keyCode == 123) return false;
@@ -163,12 +182,4 @@
     };
 </script>
 </body>
-
-
 </html>
-
-
-
-
-
-
